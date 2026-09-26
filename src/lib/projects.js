@@ -1,9 +1,15 @@
 export const CATEGORIES = ["All", "Machine Learning", "Computer Vision", "Full-Stack", "Others"];
+import srExamImage from "/assets/images/sr-exam.jpg";
+import spec2priceImage from "/assets/images/spec2price.jpg";
+import aslGestureRecognitionImage from "/assets/images/asl-gesture-recognition.jpg";
+import fullStackProjectsImage from "/assets/images/full-stack-projects.jpg";
+import cybersecurityContentImage from "/assets/images/cybersecurity-content.jpg";
+import checkshopSentimentAnalysisImage from "/assets/images/checkshop-sentiment-analysis.jpg";
 
 export const PROJECTS = [
   {
     title: "SR-Exam – Exam Management Platform",
-    image: "sr-exam.jpg",
+    image: srExamImage,
     description:
       "Full-stack exam scheduling and proctoring system built with modern client-server architecture. Features automated allocation of students and proctors, real-time transaction management, cheating reporting, and file upload/download for exam materials. Built with a 5-person PKM-KC research team — contributed QA (13 test scenarios), documentation, and Scrum Master duties.",
     link: null,
@@ -15,7 +21,7 @@ export const PROJECTS = [
   },
   {
     title: "Spec2Price – Laptop Price Prediction",
-    image: "spec2price.jpg",
+    image: spec2priceImage,
     description:
       "Ensemble-based machine learning model (ExtraTrees + advanced feature engineering) that predicts continuous laptop prices in INR. Achieved Test R² of 0.9047 with optimized 20-feature subset via Lasso. Deployed as an interactive Streamlit application. Built with a 5-person research team (Group 16).",
     link: null,
@@ -28,7 +34,7 @@ export const PROJECTS = [
   },
   {
     title: "Real-Time Hand Gesture Recognition (ASL)",
-    image: "asl-gesture-recognition.jpg",
+    image: aslGestureRecognitionImage,
     description:
       "Traditional machine learning pipeline combining HOG, LBP, and Hu Moments features with a linear SVM classifier. Recognizes 29 static ASL gestures (A–Z + space/delete/nothing) at 98.79% accuracy. Deployed as a real-time webcam web application running on CPU only. Built with a 5-person university research team.",
     link: null,
@@ -40,7 +46,7 @@ export const PROJECTS = [
   },
   {
     title: "Personal Full-Stack Projects Collection",
-    image: "full-stack-projects.jpg",
+    image: fullStackProjectsImage,
     description:
       "A series of independent full-stack and utility applications exploring modern web technologies, APIs, and practical problem-solving. Continuously updated repository of experiments and production-ready tools.",
     link: "https://github.com/Overols?tab=repositories",
@@ -48,7 +54,7 @@ export const PROJECTS = [
   },
   {
     title: "Cybersecurity Content & Outreach Initiatives",
-    image: "cybersecurity-content.jpg",
+    image: cybersecurityContentImage,
     description:
       "One-year contribution as Media and Publication Activist for the Cyber Security Community. Produced educational content, campaign materials, and public awareness posts focused on digital security best practices.",
     link: null,
@@ -63,7 +69,7 @@ export const PROJECTS = [
   },
   {
     title: "CheckShop – Sentiment Analysis of Online Shop Reviews",
-    image: "checkshop-sentiment-analysis.jpg",
+    image: checkshopSentimentAnalysisImage,
     description:
       "Comparative NLP research benchmarking Logistic Regression, Naive Bayes, XGBoost, and a fine-tuned BERT model on 8,587 e-commerce reviews. BERT reached a 94.4% macro F1-score. Integrated into CheckShop, a Streamlit app giving sellers real-time multi-model sentiment predictions. Built with a 5-person university research team.",
     link: null,
