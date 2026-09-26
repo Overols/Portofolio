@@ -1,0 +1,60 @@
+import {
+  Code2,
+  Atom,
+  FileCode,
+  Braces,
+  Server,
+  Palette,
+  Brain,
+  Eye,
+  BarChart3,
+  LineChart,
+  Table,
+  GitBranch,
+  Terminal,
+  Database,
+  ShieldCheck,
+  Workflow,
+  Cpu,
+  Coffee,
+  Network,
+  Layers,
+} from "lucide-react";
+
+export const SKILL_GROUPS = [
+  {
+    category: "Languages & Frameworks",
+    skills: [
+      { name: "JavaScript", icon: Code2 },
+      { name: "React", icon: Atom },
+      { name: "Python", icon: FileCode },
+      { name: "TypeScript", icon: Braces },
+      { name: "Node.js", icon: Server },
+      { name: "Tailwind CSS", icon: Palette },
+      { name: "C", icon: Cpu },
+      { name: "Java", icon: Coffee },
+    ],
+  },
+  {
+    category: "AI & Data",
+    skills: [
+      { name: "Machine Learning", icon: Brain },
+      { name: "Computer Vision", icon: Eye },
+      { name: "Data Analysis", icon: BarChart3 },
+      { name: "Streamlit", icon: LineChart },
+      { name: "Pandas", icon: Table },
+    ],
+  },
+  {
+    category: "Tools & Practices",
+    skills: [
+      { name: "Git", icon: GitBranch },
+      { name: "Linux", icon: Terminal },
+      { name: "SQL", icon: Database },
+      { name: "Cybersecurity", icon: ShieldCheck },
+      { name: "Agile / Scrum", icon: Workflow },
+      { name: "Packet Tracer", icon: Network },
+      { name: "XAMPP", icon: Layers },
+    ],
+  },
+];

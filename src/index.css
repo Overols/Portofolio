@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 11% 6%;
+    --foreground: 0 0% 97%;
+    --card: 240 10% 9%;
+    --card-foreground: 0 0% 97%;
+    --popover: 240 10% 9%;
+    --popover-foreground: 0 0% 97%;
+    --primary: 250 84% 64%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 8% 13%;
+    --secondary-foreground: 0 0% 97%;
+    --muted: 240 8% 13%;
+    --muted-foreground: 240 6% 64%;
+    --accent: 250 84% 64%;
+    --accent-foreground: 0 0% 100%;
+    --accent-2: 166 68% 47%;
+    --destructive: 0 72% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 8% 17%;
+    --input: 240 8% 17%;
+    --ring: 250 84% 64%;
+    --chart-1: 250 84% 64%;
+    --chart-2: 166 68% 47%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.85rem;
+    --font-heading: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --sidebar-background: 240 10% 9%;
+    --sidebar-foreground: 0 0% 97%;
+    --sidebar-primary: 250 84% 64%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 8% 13%;
+    --sidebar-accent-foreground: 0 0% 97%;
+    --sidebar-border: 240 8% 17%;
+    --sidebar-ring: 250 84% 64%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-feature-settings: "ss01", "cv01";
+  }
+}
+
+@layer utilities {
+  .font-mono-tech {
+    font-family: var(--font-mono);
+  }
+
+  /* Gradient text used sparingly — one accent, not a rainbow */
+  .text-gradient {
+    background-image: linear-gradient(90deg, hsl(var(--accent)), hsl(var(--accent-2)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Soft, slow-drifting gradient orbs for hero/section backgrounds */
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(3%, -4%) scale(1.08); }
+  }
+  .orb-drift {
+    animation: drift 16s ease-in-out infinite;
+  }
+  .orb-drift-slow {
+    animation: drift 22s ease-in-out infinite reverse;
+  }
+
+  /* Section reveal */
+  @keyframes fade-up-in {
+    0% { opacity: 0; transform: translateY(0.6em); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up {
+    opacity: 0;
+    animation: fade-up-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Hero split-word reveal */
+  @keyframes word-in {
+    0% { opacity: 0; transform: translateY(0.35em); filter: blur(6px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+  .word-in {
+    display: inline-block;
+    opacity: 0;
+    animation: word-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .link-underline {
+    background-image: linear-gradient(hsl(var(--accent)), hsl(var(--accent)));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 2px;
+    transition: background-size 0.25s ease, color 0.25s ease;
+  }
+  .link-underline:hover {
+    background-size: 100% 2px;
+  }
+}

@@ -1,0 +1,58 @@
+export const CERTIFICATION_GROUPS = [
+  {
+    category: "AI & Generative AI (Google)",
+    items: [
+      "Google AI",
+      "AI Fundamentals",
+      "AI for App Building",
+      "AI for App Deployment",
+      "AI for Data Analysis",
+      "AI for Content Creation",
+      "AI for Writing and Communicating",
+      "AI for Research and Insights",
+      "AI for Brainstorming and Planning",
+      "Accelerate Your Job Search with AI",
+    ],
+  },
+  {
+    category: "Cybersecurity & IT Support (Google)",
+    items: [
+      "Google Cybersecurity Certificate/Specialization",
+      "Foundations of Cybersecurity",
+      "Play It Safe: Manage Security Risks",
+      "Assets, Threats, and Vulnerabilities",
+      "Connect and Protect: Networks and Network Security",
+      "Tools of the Trade: Linux and SQL",
+      "Sound the Alarm: Detection and Response",
+      "Automate Cybersecurity Tasks with Python",
+      "IT Security: Defense Against the Digital Dark Arts",
+      "Technical Support Fundamentals",
+      "Operating Systems and You",
+      "The Bits and Bytes of Computer Networking",
+      "Google IT Support",
+      "Put It to Work: Prepare for Cybersecurity Jobs",
+    ],
+  },
+  {
+    category: "Project Management (Google)",
+    items: [
+      "Google Project Management Certificate/Specialization",
+      "Foundations of Project Management",
+      "Project Initiation",
+      "Project Planning",
+      "Project Execution",
+      "Agile Project Management",
+      "Capstone: Applying Project Management in the Real World",
+    ],
+  },
+  {
+    category: "English & Professional Communication (BINUS University)",
+    items: [
+      "Market Research & Business Communication (CEFR C2.2)",
+      "Advanced English (CEFR C2.1)",
+      "Professional Office (CEFR C1.2)",
+      "Creative Writing (CEFR C1.1)",
+      "English Independent User (CEFR B2.2)",
+    ],
+  },
+];
