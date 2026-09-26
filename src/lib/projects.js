@@ -3,7 +3,7 @@ export const CATEGORIES = ["All", "Machine Learning", "Computer Vision", "Full-S
 export const PROJECTS = [
   {
     title: "SR-Exam – Exam Management Platform",
-    image: "SR_Exam_Thumbnail.png",
+    image: "sr-exam.jpg",
     description:
       "Full-stack exam scheduling and proctoring system built with modern client-server architecture. Features automated allocation of students and proctors, real-time transaction management, cheating reporting, and file upload/download for exam materials. Built with a 5-person PKM-KC research team — contributed QA (13 test scenarios), documentation, and Scrum Master duties.",
     link: null,
@@ -15,6 +15,7 @@ export const PROJECTS = [
   },
   {
     title: "Spec2Price – Laptop Price Prediction",
+    image: "spec2price.jpg",
     description:
       "Ensemble-based machine learning model (ExtraTrees + advanced feature engineering) that predicts continuous laptop prices in INR. Achieved Test R² of 0.9047 with optimized 20-feature subset via Lasso. Deployed as an interactive Streamlit application. Built with a 5-person research team (Group 16).",
     link: null,
