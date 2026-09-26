@@ -3,6 +3,7 @@ export const CATEGORIES = ["All", "Machine Learning", "Computer Vision", "Full-S
 export const PROJECTS = [
   {
     title: "SR-Exam – Exam Management Platform",
+    image: "SR_Exam_Thumbnail.png",
     description:
       "Full-stack exam scheduling and proctoring system built with modern client-server architecture. Features automated allocation of students and proctors, real-time transaction management, cheating reporting, and file upload/download for exam materials. Built with a 5-person PKM-KC research team — contributed QA (13 test scenarios), documentation, and Scrum Master duties.",
     link: null,
