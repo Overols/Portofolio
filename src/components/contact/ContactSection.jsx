@@ -3,7 +3,7 @@ import { Linkedin, Github, Instagram, Send, Loader2, CheckCircle2, AlertCircle }
 
 // Get a free access key at https://web3forms.com (enter your email, no signup) —
 // paste it below. Submissions land straight in your inbox, no backend needed.
-const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+const WEB3FORMS_ACCESS_KEY = "7cbb869c-6b37-4bb8-bf38-e39283d6ff00";
 
 const SOCIALS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/muhammadridhoprakoso/", Icon: Linkedin },
