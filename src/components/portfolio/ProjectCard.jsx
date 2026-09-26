@@ -21,10 +21,19 @@ export default function ProjectCard({ project, index = 0 }) {
 
   return (
     <div className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-[hsl(var(--accent))]/50 transition-colors flex flex-col">
-      <div className={`aspect-video bg-gradient-to-br ${gradient} flex items-center justify-center relative overflow-hidden`}>
-        <span className="font-heading font-bold text-4xl text-white/90 tracking-tight">
-          {initials(project.title)}
-        </span>
+      <div className={`aspect-video ${project.image ? "" : `bg-gradient-to-br ${gradient}`} flex items-center justify-center relative overflow-hidden`}>
+        {project.image ? (
+          <img
+            src={project.image}
+            alt={project.title}
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        ) : (
+          <span className="font-heading font-bold text-4xl text-white/90 tracking-tight">
+            {initials(project.title)}
+          </span>
+        )}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
       </div>
 
