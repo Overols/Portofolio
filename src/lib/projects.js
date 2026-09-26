@@ -1,10 +1,10 @@
 export const CATEGORIES = ["All", "Machine Learning", "Computer Vision", "Full-Stack", "Others"];
-import srExamImage from "src/assets/images/sr-exam.jpg";
-import spec2priceImage from "src/assets/images/spec2price.jpg";
-import aslGestureRecognitionImage from "src/assets/images/asl-gesture-recognition.jpg";
-import fullStackProjectsImage from "src/assets/images/full-stack-projects.jpg";
-import cybersecurityContentImage from "src/assets/images/cybersecurity-content.jpg";
-import checkshopSentimentAnalysisImage from "src/assets/images/checkshop-sentiment-analysis.jpg";
+import srExamImage from "../assets/projects/sr-exam.jpg";
+import spec2priceImage from "../assets/projects/spec2price.jpg";
+import aslGestureRecognitionImage from "../assets/projects/asl-gesture-recognition.jpg";
+import fullStackProjectsImage from "../assets/projects/full-stack-projects.jpg";
+import cybersecurityContentImage from "../assets/projects/cybersecurity-content.jpg";
+import checkshopSentimentAnalysisImage from "../assets/projects/checkshop-sentiment-analysis.jpg";
 
 export const PROJECTS = [
   {
