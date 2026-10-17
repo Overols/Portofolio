@@ -25,23 +25,28 @@ const TYPOS = {
 
 const reject = (res, error) => res.status(422).json({ error });
 
-// Sandbox returns simulated results ("valid" for almost anything), so it is ignored on Vercel production.
-const isSandbox = () => process.env.QEV_SANDBOX === "true" && process.env.VERCEL_ENV !== "production";
-
-// QuickEmailVerification single-email API (SMTP-level check).
+// EmailVerify.io single-email API (syntax + MX + blacklist + SMTP mailbox check).
+// Docs: GET https://app.emailverify.io/api/v1/validate?key=KEY&email=EMAIL -> { email, status, sub_status }
 // Returns { status: "ok", data } or { status: "unconfigured" | "unavailable" }.
 async function checkMailbox(email) {
-  const key = process.env.QEV_API_KEY;
+  const key = process.env.EMAILVERIFY_API_KEY;
   if (!key) return { status: "unconfigured" };
-  const endpoint = isSandbox() ? "/v1/verify/sandbox" : "/v1/verify";
-  const url = `https://api.quickemailverification.com${endpoint}?email=${encodeURIComponent(email)}&apikey=${encodeURIComponent(key)}`;
+  const url =
+    "https://app.emailverify.io/api/v1/validate" +
+    `?key=${encodeURIComponent(key)}&email=${encodeURIComponent(email)}`;
+
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 8000);
+  const timer = setTimeout(() => ctrl.abort(), 10000);
   try {
     const r = await fetch(url, { signal: ctrl.signal });
-    if (!r.ok) return { status: "unavailable", http: r.status };
-    const d = await r.json();
-    return d.success === "true" ? { status: "ok", data: d } : { status: "unavailable" };
+    const text = await r.text();
+    let d;
+    try { d = JSON.parse(text); } catch { d = null; }
+    // Error replies ("Invalid API Key", "0 credits remaining", "Please Try again"...) carry no usable status.
+    if (!r.ok || !d || typeof d.status !== "string") {
+      return { status: "unavailable", http: r.status, detail: text.slice(0, 120) };
+    }
+    return { status: "ok", data: d };
   } catch {
     return { status: "unavailable" };
   } finally {
@@ -72,55 +77,47 @@ export default async function handler(req, res) {
   const [local, domain] = e.split("@");
   if (TYPOS[domain]) return reject(res, `Did you mean ${local}@${TYPOS[domain]}?`);
   // Free local checks first, so junk never costs an API credit.
-  // QEV_SANDBOX=true skips them so you can test with the sandbox's example.com addresses.
-  if (!isSandbox()) {
-    if (BLOCKED.has(domain)) return reject(res, "Disposable or placeholder emails aren't accepted. Please use your real email.");
+  if (BLOCKED.has(domain)) return reject(res, "Disposable or placeholder emails aren't accepted. Please use your real email.");
 
-    try {
-      const mx = await dns.resolveMx(domain);
-      if (!mx.some((r) => r.exchange && r.exchange !== ".")) {
-        return reject(res, "That email domain can't receive mail.");
-      }
-    } catch (err) {
-      if (err.code === "ENOTFOUND" || err.code === "ENODATA") return reject(res, "That email domain doesn't exist.");
-      return res.status(503).json({ error: "Couldn't verify your email right now. Please try again." });
+  try {
+    const mx = await dns.resolveMx(domain);
+    if (!mx.some((r) => r.exchange && r.exchange !== ".")) {
+      return reject(res, "That email domain can't receive mail.");
     }
+  } catch (err) {
+    if (err.code === "ENOTFOUND" || err.code === "ENODATA") return reject(res, "That email domain doesn't exist.");
+    return res.status(503).json({ error: "Couldn't verify your email right now. Please try again." });
   }
 
-  // Mailbox-level check. Strict by default: only a definite "valid" gets the CV.
-  // QEV_FAIL_OPEN=true lets unverifiable addresses and API outages through instead.
-  const failOpen = process.env.QEV_FAIL_OPEN === "true";
+  // Mailbox-level check (SMTP). Strict by default: if the check can't run, nobody gets the CV.
+  // EMAILVERIFY_FAIL_OPEN=true lets people through when the key is missing, credits ran out, or the API is down.
+  const failOpen = process.env.EMAILVERIFY_FAIL_OPEN === "true";
   const check = await checkMailbox(e);
 
-  if (check.status === "unconfigured") {
-    // No QEV_API_KEY set: don't lock everyone out. The format, disposable-domain, typo and MX
-    // checks above already passed, so continue in "local checks only" mode.
-    // Set QEV_API_KEY in Vercel to also verify that the mailbox itself exists.
-    console.warn("[cv] QEV_API_KEY is not set: mailbox-level check skipped (format/MX checks only).");
-  } else if (check.status !== "ok") {
-    console.warn("[cv] mailbox check unavailable:", check.status, check.http ?? "");
+  if (check.status !== "ok") {
+    console.warn("[cv] mailbox check unavailable:", check.status, check.http ?? "", check.detail ?? "");
     if (!failOpen) {
       return res.status(503).json({
-        error: "Couldn't verify your email right now. Please try again in a moment.",
+        error: check.status === "unconfigured"
+          ? "Email verification isn't set up yet. Please contact me by email instead."
+          : "Couldn't verify your email right now. Please try again in a moment.",
       });
     }
   } else {
-    const d = check.data;
-    console.log("[cv] verify", { domain, result: d.result, reason: d.reason, accept_all: d.accept_all, disposable: d.disposable });
-    if (d.disposable === "true") return reject(res, "Disposable emails aren't accepted. Please use your real email.");
-    if (d.result === "invalid") {
-      if (d.did_you_mean) {
-        const sug = d.did_you_mean.includes("@") ? d.did_you_mean : `${local}@${d.did_you_mean}`;
-        return reject(res, `Did you mean ${sug}?`);
-      }
-      return reject(res, d.reason === "rejected_email"
-        ? "That email address doesn't exist. Please check for typos."
-        : "That email address looks invalid. Please use a real one.");
+    const status = String(check.data.status).toLowerCase();
+    const sub = String(check.data.sub_status ?? "").toLowerCase();
+    console.log("[cv] verify", { domain, status, sub_status: sub });
+
+    if (/disposable|spam.?trap|blacklist/.test(`${status} ${sub}`)) {
+      return reject(res, "Disposable or risky emails aren't accepted. Please use your real email.");
     }
-    // "unknown": only domains that accept every address (can't be checked at all) get through.
-    if (d.result !== "valid" && d.accept_all !== "true" && !failOpen) {
-      return reject(res, "We couldn't confirm that this email address exists. Please use another one.");
+    if (status === "invalid") {
+      return reject(res, /dns|mx|domain/.test(sub)
+        ? "That email domain can't receive mail. Please use a real email."
+        : "That email address doesn't exist. Please check for typos.");
     }
+    // "valid" passes. Inconclusive results (e.g. unknown / catch-all company servers) also pass,
+    // because the format, MX and disposable checks above already succeeded.
   }
 
   try {
