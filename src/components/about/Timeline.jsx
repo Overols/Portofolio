@@ -1,4 +1,5 @@
 import { CV_URL } from "@/lib/site";
+import Reveal from "@/components/Reveal";
 
 const EXPERIENCE = [
   { org: "Cyber Security Community Binus", role: "Activist, Media & Publication", years: "2025—2026" },
@@ -10,9 +11,9 @@ const STUDY = [
   { org: "SMA Plus Pembangunan Jaya", role: "High School Diploma, Natural Sciences & Mathematics", years: "2021—2024" },
 ];
 
-function Rows({ title, rows }) {
+function Rows({ title, rows, delay = 0 }) {
   return (
-    <div>
+    <Reveal delay={delay}>
       <p className="hud mb-4">{title}</p>
       <ol className="border-t border-border">
         {rows.map((r, i) => (
@@ -26,7 +27,7 @@ function Rows({ title, rows }) {
           </li>
         ))}
       </ol>
-    </div>
+    </Reveal>
   );
 }
 
@@ -34,15 +35,16 @@ export default function Timeline() {
   return (
     <div className="mt-20 grid gap-12 md:grid-cols-2">
       <Rows title="Work experience" rows={EXPERIENCE} />
-      <Rows title="Study" rows={STUDY} />
-      <a
+      <Rows title="Study" rows={STUDY} delay={0.12} />
+      <Reveal
+        as="a"
         href={CV_URL}
         download="Muhammad-Ridho-Prakoso-CV.pdf"
         className="hud md:col-span-2 flex items-center justify-between border border-border px-5 py-4 !text-foreground transition-colors hover:border-accent hover:!text-[hsl(var(--accent))]"
       >
         <span>In-depth look</span>
         <span>Download CV ↓</span>
-      </a>
+      </Reveal>
     </div>
   );
 }

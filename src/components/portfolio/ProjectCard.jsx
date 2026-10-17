@@ -1,8 +1,10 @@
+import Reveal from "@/components/Reveal";
+
 export default function ProjectCard({ project, index = 0 }) {
   const links = project.links?.length ? project.links : project.link ? [{ label: "View project", url: project.link }] : [];
 
   return (
-    <article className="group grid gap-6 border-b border-border py-8 md:grid-cols-[4rem_1fr_18rem] md:gap-10 md:py-10">
+    <Reveal as="article" className="group grid gap-6 border-b border-border py-8 md:grid-cols-[4rem_1fr_18rem] md:gap-10 md:py-10">
       <span className="hud">{String(index + 1).padStart(3, "0")}</span>
 
       <div>
@@ -27,6 +29,6 @@ export default function ProjectCard({ project, index = 0 }) {
       {project.image && (
         <img src={project.image} alt={project.title} loading="lazy" className="aspect-video w-full object-cover grayscale transition duration-500 group-hover:grayscale-0" />
       )}
-    </article>
+    </Reveal>
   );
 }

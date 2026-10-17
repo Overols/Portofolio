@@ -1,5 +1,6 @@
 import Timeline from "@/components/about/Timeline";
 import SectionHead from "@/components/SectionHead";
+import Reveal from "@/components/Reveal";
 import StatsRow from "@/components/about/StatsRow";
 import CertificationsList from "@/components/about/CertificationsList";
 import profilePhoto from "@/assets/images/Profile_Picture.png"
@@ -14,7 +15,7 @@ export default function AboutMe() {
         <SectionHead n="01" title="About Me" />
 
         <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-10 md:gap-16 items-start">
-          <div className="w-40 sm:w-56 md:w-full mx-auto md:mx-0">
+          <Reveal className="w-40 sm:w-56 md:w-full mx-auto md:mx-0">
             <div className="rounded-2xl overflow-hidden border border-border p-1.5 bg-card">
               <img
                 src={profilePhoto}
@@ -23,14 +24,14 @@ export default function AboutMe() {
                 className="w-full aspect-[3/4] rounded-none object-cover"
               />
             </div>
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal delay={0.12}>
             <p className="text-base sm:text-lg text-foreground/90 leading-relaxed max-w-2xl">
               {BIO}
             </p>
             <StatsRow />
-          </div>
+          </Reveal>
         </div>
 
         <Timeline />

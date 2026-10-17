@@ -1,4 +1,5 @@
 import SectionHead from "@/components/SectionHead";
+import Reveal from "@/components/Reveal";
 import { useState } from "react";
 import { Linkedin, Github, Instagram, Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
@@ -61,11 +62,11 @@ export default function ContactSection() {
     <section id="contact" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
       <div className="mx-auto max-w-6xl">
         <SectionHead n="05" title="Let's Talk" />
-        <p className="text-muted-foreground mb-10">
+        <Reveal as="p" className="text-muted-foreground mb-10">
           Open to full-stack and applied ML opportunities, collaborations, and research work.
-        </p>
+        </Reveal>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-left max-w-2xl">
+        <Reveal as="form" delay={0.1} onSubmit={handleSubmit} className="flex flex-col gap-4 text-left max-w-2xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input
               name="name"
@@ -125,7 +126,7 @@ export default function ContactSection() {
               {errorMsg}
             </p>
           )}
-        </form>
+        </Reveal>
 
         <ul className="mt-16 border-t border-border">
           {LINKS.map(({ label, text, href }) => (

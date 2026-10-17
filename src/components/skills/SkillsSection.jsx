@@ -1,4 +1,5 @@
 import SectionHead from "@/components/SectionHead";
+import Reveal from "@/components/Reveal";
 import { SKILL_GROUPS } from "@/lib/skills";
 
 export default function SkillsSection() {
@@ -8,8 +9,8 @@ export default function SkillsSection() {
         <SectionHead n="04" count={`${SKILL_GROUPS.length} Categories`} title="Skills" />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
-          {SKILL_GROUPS.map((group) => (
-            <div key={group.category}>
+          {SKILL_GROUPS.map((group, gi) => (
+            <Reveal key={group.category} delay={gi * 0.1}>
               <h3 className="font-heading font-semibold text-sm text-foreground mb-4 pb-3 border-b border-border">
                 {group.category}
               </h3>
@@ -29,7 +30,7 @@ export default function SkillsSection() {
                   );
                 })}
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

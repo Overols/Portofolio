@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { X, FileImage } from "lucide-react";
 import { CERTIFICATION_GROUPS } from "@/lib/certifications";
+import Reveal from "@/components/Reveal";
 
 // Auto-loads every image dropped into src/assets/certifications/ — no manual
 // imports needed. Name each file after its certificate, e.g. "ai-fundamentals.jpg"
@@ -36,7 +37,7 @@ export default function CertificationsList() {
   }, [lightbox]);
 
   return (
-      <div id="certifications" className="mt-16 border-t border-border pt-10 scroll-mt-24">
+    <div id="certifications" className="mt-16 border-t border-border pt-10 scroll-mt-24">
       <div className="flex items-center gap-3 mb-8">
         <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent-2))]" />
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -46,7 +47,7 @@ export default function CertificationsList() {
 
       <div className="flex flex-col gap-10">
         {CERTIFICATION_GROUPS.map((group) => (
-          <div key={group.category}>
+          <Reveal key={group.category}>
             <h3 className="flex items-center gap-2 font-heading font-semibold text-sm text-foreground mb-4">
               {group.category}
               <span className="text-xs font-normal text-muted-foreground">
@@ -83,7 +84,7 @@ export default function CertificationsList() {
                 );
               })}
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
 
