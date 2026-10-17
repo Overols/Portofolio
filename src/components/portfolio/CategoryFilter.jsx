@@ -8,9 +8,9 @@ export default function CategoryFilter({ active, onChange }) {
           key={cat}
           type="button"
           onClick={() => onChange(cat)}
-          className={`text-sm font-medium px-4 py-2 rounded-full border transition-colors ${
+          className={`text-sm font-medium px-4 py-2 rounded-sm border transition-colors ${
             active === cat
-              ? "border-transparent bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--accent-2))] text-white"
+              ? "border-transparent bg-accent text-accent-foreground"
               : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
           }`}
         >

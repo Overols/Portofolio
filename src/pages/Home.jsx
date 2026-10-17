@@ -5,6 +5,7 @@ import PortfolioSection from "@/components/portfolio/PortfolioSection";
 import SkillsSection from "@/components/skills/SkillsSection";
 import ContactSection from "@/components/contact/ContactSection";
 import Footer from "@/components/Footer";
+import HudBar from "@/components/HudBar";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       </main>
 
       <Footer />
+      <HudBar />
     </div>
   );
 }

@@ -1,78 +1,73 @@
-const NAME = "Muhammad Ridho Prakoso";
-const TITLE = "Full-Stack Software Developer & AI Analyst";
-const SUMMARY =
-  "I build full-stack systems and applied ML models — from real-time computer vision to production-ready platforms.";
+import { ArrowUpRight, Download } from "lucide-react";
+import { SKILL_GROUPS } from "@/lib/skills";
+import { CV_URL } from "@/lib/site";
+
+const TECH = SKILL_GROUPS.flatMap((g) => g.skills.map((s) => s.name));
+const FACTS = ["Based in Jakarta, Indonesia", "Bina Nusantara University", "Open to new opportunities"];
 
 export default function Hero() {
-  const words = NAME.split(" ");
-
   return (
-    <section
-      id="top"
-      className="relative min-h-[100svh] w-full overflow-hidden bg-background flex flex-col justify-center"
-    >
-      {/* Soft vibrant gradient orbs — the only background texture */}
-      <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="orb-drift absolute -top-32 -left-24 h-[420px] w-[420px] rounded-full opacity-30 blur-[110px]"
-          style={{ background: "hsl(var(--accent))" }}
-        />
-        <div
-          className="orb-drift-slow absolute -bottom-40 -right-20 h-[460px] w-[460px] rounded-full opacity-25 blur-[120px]"
-          style={{ background: "hsl(var(--accent-2))" }}
-        />
-      </div>
-
-      <div className="relative z-10 px-5 sm:px-8 pt-28 pb-20">
+    <section id="top" className="relative min-h-[100svh] w-full overflow-hidden bg-background flex flex-col">
+      <div className="relative z-10 flex flex-1 items-center px-5 sm:px-8 pt-28 pb-12">
         <div className="mx-auto max-w-6xl w-full">
-          <div
-            className="fade-up inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1.5 text-xs font-medium text-muted-foreground mb-7"
-            style={{ animationDelay: "0.05s" }}
-          >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-[hsl(var(--accent-2))] opacity-70 animate-ping" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[hsl(var(--accent-2))]" />
-            </span>
-            Open to new opportunities
-          </div>
+          <p className="fade-up font-mono-tech text-xs sm:text-sm uppercase tracking-[0.14em] text-foreground" style={{ animationDelay: "0.05s" }}>
+            Full-Stack Software Developer &amp; AI Analyst
+          </p>
+          <p className="fade-up hud mt-2" style={{ animationDelay: "0.12s" }}>
+            Full-stack systems · Applied ML · Computer vision
+          </p>
 
-          <h1 className="font-heading font-extrabold tracking-[-0.03em] leading-[1.02]">
-            <span className="block text-[clamp(2.2rem,7vw,4.5rem)]">
-              {words.map((w, i) => (
-                <span key={i} className="word-in" style={{ animationDelay: `${0.15 + i * 0.08}s` }}>
-                  {w}
-                  {i < words.length - 1 ? "\u00A0" : ""}
-                </span>
-              ))}
-            </span>
+          <h1 className="mt-8 font-heading font-extrabold uppercase tracking-[-0.045em] leading-[0.88] text-[clamp(2.5rem,9.5vw,7.5rem)]">
+            {["Muhammad Ridho", "Prakoso"].map((line, i, arr) => (
+              <span key={line} className="block">
+                <span className="word-in" style={{ animationDelay: `${0.2 + i * 0.12}s` }}>{line}</span>
+                {i === arr.length - 1 && <span className="text-[hsl(var(--accent))]">.</span>}
+              </span>
+            ))}
           </h1>
 
-          <p
-            className="fade-up mt-4 text-lg sm:text-xl font-medium text-transparent bg-clip-text bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--accent-2))]"
-            style={{ animationDelay: "0.45s" }}
-          >
-            {TITLE}
+          <p className="fade-up mt-8 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed" style={{ animationDelay: "0.55s" }}>
+            I build full-stack systems and applied ML models — from real-time computer vision to production-ready platforms.
           </p>
 
-          <p className="fade-up mt-5 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed" style={{ animationDelay: "0.55s" }}>
-            {SUMMARY}
-          </p>
-
-          <div className="fade-up mt-9 flex flex-col sm:flex-row gap-3 sm:gap-4" style={{ animationDelay: "0.65s" }}>
-            <a
-              href="#contact"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--accent-2))] text-white font-semibold text-sm px-6 py-3.5 hover:opacity-90 transition-opacity shadow-[0_8px_30px_-10px_hsl(var(--accent)/0.6)]"
-            >
+          <div className="fade-up mt-10 flex flex-col sm:flex-row gap-3" style={{ animationDelay: "0.65s" }}>
+            <a href="#contact" className="group inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 hover:brightness-110 transition">
               Contact about work
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
+
             <a
-              href="#work"
-              className="group inline-flex items-center justify-center gap-2 rounded-full border border-border text-foreground font-semibold text-sm px-6 py-3.5 hover:border-foreground/40 hover:bg-card transition-colors"
+              href={CV_URL}
+              download="Muhammad-Ridho-Prakoso-CV.pdf"
+              className="group relative inline-flex items-center justify-center overflow-hidden border border-accent/60 hover:border-accent text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 transition-colors"
             >
+              <span aria-hidden className="absolute inset-0 translate-y-full bg-accent transition-transform duration-300 ease-out group-hover:translate-y-0" />
+              <span className="relative flex items-center gap-3 transition-colors duration-300 group-hover:text-accent-foreground">
+                <Download className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                Download CV
+                <span className="text-[10px] opacity-60">PDF</span>
+              </span>
+            </a>
+
+            <a href="#work" className="group inline-flex items-center justify-center gap-2 border border-border text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 hover:border-foreground/50 transition-colors">
               View portfolio
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </a>
           </div>
+
+          <div className="fade-up hud mt-12 flex flex-col sm:flex-row gap-2 sm:gap-10" style={{ animationDelay: "0.8s" }}>
+            {FACTS.map((f) => <span key={f}>{f}</span>)}
+          </div>
+        </div>
+      </div>
+
+      <span className="hud absolute right-8 bottom-16 hidden sm:block">▼ Scroll</span>
+
+      <div aria-hidden className="relative z-10 overflow-hidden whitespace-nowrap border-y border-border py-3">
+        <div className="marquee hud">
+          {[...TECH, ...TECH].map((t, i) => (
+            <span key={i} className="px-6">{t} <span className="text-[hsl(var(--accent))]">/</span></span>
+          ))}
         </div>
       </div>
     </section>

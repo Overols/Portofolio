@@ -62,7 +62,7 @@ export default function CertificationsList() {
                     type="button"
                     disabled={!src}
                     onClick={() => src && setLightbox({ src, name: item })}
-                    className="group text-left rounded-xl border border-border bg-card overflow-hidden hover:border-[hsl(var(--accent))]/50 transition-colors disabled:cursor-default"
+                    className="group text-left rounded-none border border-border bg-card overflow-hidden hover:border-[hsl(var(--accent))]/50 transition-colors disabled:cursor-default"
                   >
                     <div className="aspect-[4/3] bg-secondary/50 flex items-center justify-center overflow-hidden">
                       {src ? (
@@ -104,7 +104,7 @@ export default function CertificationsList() {
             <img
               src={lightbox.src}
               alt={lightbox.name}
-              className="w-full h-auto rounded-xl border border-border"
+              className="w-full h-auto rounded-none border border-border"
             />
             <p className="mt-4 text-center text-sm text-muted-foreground">{lightbox.name}</p>
           </div>

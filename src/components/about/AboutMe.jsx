@@ -1,3 +1,5 @@
+import Timeline from "@/components/about/Timeline";
+import SectionHead from "@/components/SectionHead";
 import StatsRow from "@/components/about/StatsRow";
 import CertificationsList from "@/components/about/CertificationsList";
 import profilePhoto from "@/assets/images/Profile_Picture.png"
@@ -9,12 +11,7 @@ export default function AboutMe() {
   return (
     <section id="about" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8">
       <div className="mx-auto max-w-6xl">
-        <div className="flex items-center gap-3 mb-8">
-          <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent))]" />
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            About
-          </p>
-        </div>
+        <SectionHead n="01" title="About Me" />
 
         <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-10 md:gap-16 items-start">
           <div className="w-40 sm:w-56 md:w-full mx-auto md:mx-0">
@@ -23,7 +20,7 @@ export default function AboutMe() {
                 src={profilePhoto}
                 alt="Muhammad Ridho Prakoso"
                 loading="lazy"
-                className="w-full aspect-[3/4] rounded-xl object-cover"
+                className="w-full aspect-[3/4] rounded-none object-cover"
               />
             </div>
           </div>
@@ -36,6 +33,7 @@ export default function AboutMe() {
           </div>
         </div>
 
+        <Timeline />
         <CertificationsList />
       </div>
     </section>

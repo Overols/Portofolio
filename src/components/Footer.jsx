@@ -20,7 +20,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-10">
           <div className="max-w-sm">
             <a href="#top" className="flex items-center gap-2.5 mb-4">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[hsl(var(--accent))] to-[hsl(var(--accent-2))] font-heading font-bold text-sm text-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-accent font-mono-tech font-bold text-sm text-accent-foreground">
                 MR
               </span>
               <span className="font-heading font-semibold text-sm text-foreground">

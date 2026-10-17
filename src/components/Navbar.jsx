@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 const LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Work", href: "#work" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
+  { n: "01", label: "About", href: "#about" },
+  { n: "02", label: "Work", href: "#work" },
+  { n: "03", label: "Skills", href: "#skills" },
+  { n: "04", label: "Contact", href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -13,9 +13,7 @@ export default function Navbar() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   useEffect(() => {
@@ -27,26 +25,20 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50">
-      <div
-        className={`transition-colors duration-300 ${
-          scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border" : "bg-transparent"
-        }`}
-      >
+      <div className={`transition-colors duration-300 ${scrolled || open ? "bg-background/85 backdrop-blur-xl border-b border-border" : "bg-transparent"}`}>
         <nav className="mx-auto max-w-6xl px-5 sm:px-8 h-16 flex items-center justify-between">
-          <a href="#top" className="flex items-center gap-2.5 group">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[hsl(var(--accent))] to-[hsl(var(--accent-2))] font-heading font-bold text-sm text-white">
-              MR
+          <a href="#top" className="flex items-baseline gap-3">
+            <span className="font-heading font-extrabold uppercase tracking-tight text-lg">
+              Ridho<span className="text-[hsl(var(--accent))]">.</span>
             </span>
-            <span className="font-heading font-semibold text-sm text-foreground hidden sm:inline">
-              Ridho Prakoso
-            </span>
+            <span className="hud hidden lg:inline">Portfolio/{new Date().getFullYear()}</span>
           </a>
 
-          <ul className="hidden md:flex items-center gap-9 text-sm font-medium text-muted-foreground">
+          <ul className="hidden md:flex items-center gap-8">
             {LINKS.map((l) => (
               <li key={l.label}>
-                <a href={l.href} className="link-underline hover:text-foreground transition-colors pb-0.5">
-                  {l.label}
+                <a href={l.href} className="hud transition-colors hover:!text-foreground">
+                  {l.n}/{l.label}
                 </a>
               </li>
             ))}
@@ -54,9 +46,9 @@ export default function Navbar() {
 
           <a
             href="#contact"
-            className="hidden md:inline-flex items-center gap-2 rounded-full bg-foreground text-background text-sm font-semibold px-5 py-2.5 hover:bg-foreground/90 transition-colors"
+            className="hud hidden md:inline-flex border border-border px-4 py-2 !text-foreground transition-colors hover:bg-accent hover:!text-accent-foreground hover:border-accent"
           >
-            Let's talk
+            Get in touch
           </a>
 
           <button
@@ -64,45 +56,24 @@ export default function Navbar() {
             aria-label="Toggle navigation"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="md:hidden flex flex-col gap-1.5 p-2 -mr-2"
+            className="md:hidden hud !text-foreground p-2 -mr-2"
           >
-            <span
-              className={`block h-0.5 w-5 rounded-full bg-foreground transition-transform duration-300 ${
-                open ? "translate-y-[7px] rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`block h-0.5 w-5 rounded-full bg-foreground transition-transform duration-300 ${
-                open ? "-translate-y-[1px] -rotate-45" : ""
-              }`}
-            />
+            {open ? "Close" : "Menu"}
           </button>
         </nav>
       </div>
 
       {open && (
         <div className="md:hidden border-b border-border bg-background/95 backdrop-blur-xl">
-          <ul className="px-5 py-5 flex flex-col gap-4 text-base">
-            {LINKS.map((l) => (
-              <li key={l.label}>
-                <a
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="text-foreground/85 hover:text-foreground transition-colors"
-                >
+          <ul className="px-5 py-4 flex flex-col">
+            {[...LINKS, { n: "05", label: "Get in touch", href: "#contact" }].map((l) => (
+              <li key={l.label} className="border-b border-border last:border-b-0">
+                <a href={l.href} onClick={() => setOpen(false)} className="flex items-baseline gap-4 py-4 font-heading font-extrabold uppercase text-2xl tracking-tight">
+                  <span className="hud">{l.n}</span>
                   {l.label}
                 </a>
               </li>
             ))}
-            <li>
-              <a
-                href="#contact"
-                onClick={() => setOpen(false)}
-                className="inline-flex items-center gap-2 rounded-full bg-foreground text-background text-sm font-semibold px-5 py-2.5"
-              >
-                Let's talk
-              </a>
-            </li>
           </ul>
         </div>
       )}
