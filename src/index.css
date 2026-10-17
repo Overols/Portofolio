@@ -152,8 +152,6 @@
     color: hsl(var(--muted-foreground));
   }
 
-  
-
   /* Hero background art — pixel planet, tinted to the accent */
   .hero-bg-art {
     position: absolute;
