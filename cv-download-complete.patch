@@ -1,0 +1,361 @@
+diff --git a/.env.example b/.env.example
+new file mode 100644
+index 0000000..2d16505
+--- /dev/null
++++ b/.env.example
+@@ -0,0 +1,4 @@
++# Copy to .env.local for local dev, and set the same names in Vercel > Settings > Environment Variables.
++QEV_API_KEY=
++# Optional: true = use QuickEmailVerification's free sandbox (simulated results, no credits used)
++QEV_SANDBOX=false
+diff --git a/.gitignore b/.gitignore
+index 2a47a4c..4f181bf 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,6 +1,7 @@
+ #env
+ .env
+ .env.*
++!.env.example
+ 
+ # Logs
+ /logs
+@@ -34,4 +35,7 @@ dist-ssr
+ 
+ .env
+ .vite
+-base44/.app.jsonc
+\ No newline at end of file
++base44/.app.jsonc
++
++# Vercel CLI local link (created by `vercel dev`)
++.vercel
+diff --git a/api/request-cv.js b/api/request-cv.js
+new file mode 100644
+index 0000000..3b37439
+--- /dev/null
++++ b/api/request-cv.js
+@@ -0,0 +1,115 @@
++import { promises as dns } from "node:dns";
++import { readFile } from "node:fs/promises";
++import path from "node:path";
++
++const EMAIL_RE = /^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$/;
++
++// Throwaway-inbox providers and placeholder domains. Extend as needed.
++const BLOCKED = new Set([
++  "mailinator.com", "guerrillamail.com", "guerrillamail.net", "guerrillamail.org", "sharklasers.com", "grr.la",
++  "10minutemail.com", "10minutemail.net", "tempmail.com", "temp-mail.org", "temp-mail.io", "tempmail.net",
++  "tempail.com", "yopmail.com", "yopmail.net", "trashmail.com", "trashmail.net", "getnada.com", "nada.email",
++  "dispostable.com", "maildrop.cc", "throwawaymail.com", "fakeinbox.com", "mailnesia.com", "mintemail.com",
++  "emailondeck.com", "moakt.com", "mohmal.com", "burnermail.io", "mailcatch.com", "spamgourmet.com",
++  "discard.email", "discardmail.com", "tmpmail.org", "tmpmail.net",
++  "example.com", "example.org", "example.net", "test.com", "domain.com",
++]);
++
++// Common typos of big providers -> suggest the correction instead of accepting.
++const TYPOS = {
++  "gmial.com": "gmail.com", "gmal.com": "gmail.com", "gamil.com": "gmail.com", "gmai.com": "gmail.com",
++  "gmail.co": "gmail.com", "gmail.con": "gmail.com", "yaho.com": "yahoo.com", "yahooo.com": "yahoo.com",
++  "yahoo.con": "yahoo.com", "hotnail.com": "hotmail.com", "hotmial.com": "hotmail.com",
++  "outlok.com": "outlook.com", "outlook.con": "outlook.com", "iclod.com": "icloud.com", "icloud.con": "icloud.com",
++};
++
++const reject = (res, error) => res.status(422).json({ error });
++
++// QuickEmailVerification single-email API. Returns the parsed result, or null when the
++// check can't be completed (no key, out of credits, rate limit, timeout, outage), in
++// which case we fail open so real visitors are never blocked by our own tooling.
++async function checkMailbox(email) {
++  const key = process.env.QEV_API_KEY;
++  if (!key) {
++    console.warn("QEV_API_KEY is not set; skipping mailbox verification.");
++    return null;
++  }
++  const endpoint = process.env.QEV_SANDBOX === "true" ? "/v1/verify/sandbox" : "/v1/verify";
++  const url = `https://api.quickemailverification.com${endpoint}?email=${encodeURIComponent(email)}&apikey=${encodeURIComponent(key)}`;
++  const ctrl = new AbortController();
++  const timer = setTimeout(() => ctrl.abort(), 4000);
++  try {
++    const r = await fetch(url, { signal: ctrl.signal });
++    if (!r.ok) return null;
++    const d = await r.json();
++    return d.success === "true" ? d : null;
++  } catch {
++    return null;
++  } finally {
++    clearTimeout(timer);
++  }
++}
++
++export default async function handler(req, res) {
++  if (req.method !== "POST") {
++    res.setHeader("Allow", "POST");
++    return res.status(405).json({ error: "Method not allowed." });
++  }
++
++  let body = req.body;
++  if (typeof body === "string") {
++    try { body = JSON.parse(body); } catch { body = {}; }
++  }
++  const { name = "", email = "", website = "" } = body || {};
++
++  if (website) return res.status(400).json({ error: "Invalid request." }); // honeypot
++
++  const n = String(name).trim();
++  const e = String(email).trim().toLowerCase();
++
++  if (n.length < 2 || n.length > 80) return reject(res, "Please enter your name.");
++  if (e.length > 254 || !EMAIL_RE.test(e)) return reject(res, "Please enter a valid email address.");
++
++  const [local, domain] = e.split("@");
++  if (TYPOS[domain]) return reject(res, `Did you mean ${local}@${TYPOS[domain]}?`);
++  // Free local checks first, so junk never costs an API credit.
++  // QEV_SANDBOX=true skips them so you can test with the sandbox's example.com addresses.
++  if (process.env.QEV_SANDBOX !== "true") {
++    if (BLOCKED.has(domain)) return reject(res, "Disposable or placeholder emails aren't accepted. Please use your real email.");
++
++    try {
++      const mx = await dns.resolveMx(domain);
++      if (!mx.some((r) => r.exchange && r.exchange !== ".")) {
++        return reject(res, "That email domain can't receive mail.");
++      }
++    } catch (err) {
++      if (err.code === "ENOTFOUND" || err.code === "ENODATA") return reject(res, "That email domain doesn't exist.");
++      return res.status(503).json({ error: "Couldn't verify your email right now. Please try again." });
++    }
++  }
++
++  // Mailbox-level check (SMTP). Only a definite "invalid" blocks; unknown/accept-all pass.
++  const check = await checkMailbox(e);
++  if (check) {
++    if (check.disposable === "true") return reject(res, "Disposable emails aren't accepted. Please use your real email.");
++    if (check.result === "invalid") {
++      if (check.did_you_mean) {
++        const s = check.did_you_mean.includes("@") ? check.did_you_mean : `${local}@${check.did_you_mean}`;
++        return reject(res, `Did you mean ${s}?`);
++      }
++      return reject(res, check.reason === "rejected_email"
++        ? "That email address doesn't exist. Please check for typos."
++        : "That email address looks invalid. Please use a real one.");
++    }
++  }
++
++  try {
++    const pdf = await readFile(path.join(process.cwd(), "private", "cv.pdf"));
++    res.setHeader("Content-Type", "application/pdf");
++    res.setHeader("Content-Disposition", 'attachment; filename="Muhammad-Ridho-Prakoso-CV.pdf"');
++    res.setHeader("Cache-Control", "no-store");
++    return res.status(200).send(pdf);
++  } catch {
++    return res.status(500).json({ error: "CV file is unavailable right now." });
++  }
++}
+diff --git a/public/cv/Muhammad-Ridho-Prakoso-CV.pdf b/private/cv.pdf
+similarity index 100%
+rename from public/cv/Muhammad-Ridho-Prakoso-CV.pdf
+rename to private/cv.pdf
+diff --git a/src/components/CvDownload.jsx b/src/components/CvDownload.jsx
+new file mode 100644
+index 0000000..70a11b8
+--- /dev/null
++++ b/src/components/CvDownload.jsx
+@@ -0,0 +1,108 @@
++import { useState } from "react";
++import { Check, Loader2 } from "lucide-react";
++import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
++import { Input } from "@/components/ui/input";
++import { Label } from "@/components/ui/label";
++
++const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
++const FILENAME = "Muhammad-Ridho-Prakoso-CV.pdf";
++
++// Renders the trigger button (styled by className/children) + the name/email dialog.
++export default function CvDownload({ children, ...props }) {
++  const [open, setOpen] = useState(false);
++  const [name, setName] = useState("");
++  const [email, setEmail] = useState("");
++  const [trap, setTrap] = useState(""); // honeypot, real users never fill this
++  const [status, setStatus] = useState("idle"); // idle | loading | done
++  const [error, setError] = useState("");
++
++  async function onSubmit(e) {
++    e.preventDefault();
++    if (status === "loading") return;
++    const n = name.trim();
++    const m = email.trim();
++    if (n.length < 2) return setError("Please enter your name.");
++    if (!EMAIL_RE.test(m)) return setError("Please enter a valid email address.");
++
++    setError("");
++    setStatus("loading");
++    try {
++      const res = await fetch("/api/request-cv", {
++        method: "POST",
++        headers: { "Content-Type": "application/json" },
++        body: JSON.stringify({ name: n, email: m, website: trap }),
++      });
++      if (!res.ok || !res.headers.get("content-type")?.includes("application/pdf")) {
++        const data = await res.json().catch(() => ({}));
++        throw new Error(data.error || "Something went wrong. Please try again.");
++      }
++      const url = URL.createObjectURL(await res.blob());
++      const a = Object.assign(document.createElement("a"), { href: url, download: FILENAME });
++      document.body.appendChild(a);
++      a.click();
++      a.remove();
++      setTimeout(() => URL.revokeObjectURL(url), 10000);
++      setStatus("done");
++      setTimeout(() => setOpen(false), 1800);
++    } catch (err) {
++      setStatus("idle");
++      setError(err instanceof TypeError ? "Can't reach the server. Check your connection and try again." : err.message);
++    }
++  }
++
++  return (
++    <>
++      <button
++        type="button"
++        {...props}
++        onClick={() => {
++          setStatus("idle");
++          setError("");
++          setOpen(true);
++        }}
++      >
++        {children}
++      </button>
++
++      <Dialog open={open} onOpenChange={setOpen}>
++        <DialogContent className="sm:max-w-md">
++          <DialogHeader>
++            <DialogTitle>Download my CV</DialogTitle>
++            <DialogDescription>
++              Enter your name and a real email address. The PDF downloads instantly once your email checks out.
++            </DialogDescription>
++          </DialogHeader>
++
++          {status === "done" ? (
++            <p className="flex items-center gap-2 text-sm">
++              <Check className="h-4 w-4 text-[hsl(var(--accent))]" />
++              Thanks, {name.trim()}! Your download has started.
++            </p>
++          ) : (
++            <form onSubmit={onSubmit} noValidate className="grid gap-4">
++              <div className="grid gap-2">
++                <Label htmlFor="cv-name">Name</Label>
++                <Input id="cv-name" autoComplete="name" maxLength={80} value={name} onChange={(e) => setName(e.target.value)} />
++              </div>
++              <div className="grid gap-2">
++                <Label htmlFor="cv-email">Email</Label>
++                <Input id="cv-email" type="email" autoComplete="email" maxLength={254} value={email} onChange={(e) => setEmail(e.target.value)} />
++              </div>
++              <input type="text" name="website" value={trap} onChange={(e) => setTrap(e.target.value)} tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
++
++              {error && <p role="alert" className="text-sm text-red-400">{error}</p>}
++
++              <button
++                type="submit"
++                disabled={status === "loading"}
++                className="inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-3.5 transition hover:brightness-110 disabled:opacity-60"
++              >
++                {status === "loading" ? (<><Loader2 className="h-4 w-4 animate-spin" /> Verifying…</>) : "Verify & download"}
++              </button>
++            </form>
++          )}
++        </DialogContent>
++      </Dialog>
++    </>
++  );
++}
+diff --git a/src/components/Hero.jsx b/src/components/Hero.jsx
+index 00106d3..623969f 100644
+--- a/src/components/Hero.jsx
++++ b/src/components/Hero.jsx
+@@ -1,6 +1,6 @@
+ import { ArrowUpRight, Download } from "lucide-react";
+ import { SKILL_GROUPS } from "@/lib/skills";
+-import { CV_URL } from "@/lib/site";
++import CvDownload from "@/components/CvDownload";
+ 
+ const TECH = SKILL_GROUPS.flatMap((g) => g.skills.map((s) => s.name));
+ const FACTS = ["Based in Jakarta, Indonesia", "Bina Nusantara University", "Open to new opportunities"];
+@@ -42,9 +42,7 @@ export default function Hero() {
+               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+             </a>
+ 
+-            <a
+-              href={CV_URL}
+-              download="Muhammad-Ridho-Prakoso-CV.pdf"
++            <CvDownload
+               style={{ animationDelay: "0.77s" }}
+               className="pop-in group relative inline-flex items-center justify-center overflow-hidden border border-accent/60 hover:border-accent text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 transition-colors"
+             >
+@@ -54,7 +52,7 @@ export default function Hero() {
+                 Download CV
+                 <span className="text-[10px] opacity-60">PDF</span>
+               </span>
+-            </a>
++            </CvDownload>
+ 
+             <a href="#work" style={{ animationDelay: "0.89s" }} className="pop-in group inline-flex items-center justify-center gap-2 border border-border text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 hover:border-foreground/50 transition-colors">
+               View portfolio
+diff --git a/src/components/about/Timeline.jsx b/src/components/about/Timeline.jsx
+index 3a4f019..b6008e4 100644
+--- a/src/components/about/Timeline.jsx
++++ b/src/components/about/Timeline.jsx
+@@ -1,4 +1,4 @@
+-import { CV_URL } from "@/lib/site";
++import CvDownload from "@/components/CvDownload";
+ import Reveal from "@/components/Reveal";
+ 
+ const EXPERIENCE = [
+@@ -36,14 +36,12 @@ export default function Timeline() {
+     <div className="mt-20 grid gap-12 md:grid-cols-2">
+       <Rows title="Work experience" rows={EXPERIENCE} />
+       <Rows title="Study" rows={STUDY} delay={0.12} />
+-      <Reveal
+-        as="a"
+-        href={CV_URL}
+-        download="Muhammad-Ridho-Prakoso-CV.pdf"
+-        className="hud md:col-span-2 flex items-center justify-between border border-border px-5 py-4 !text-foreground transition-colors hover:border-accent hover:!text-[hsl(var(--accent))]"
+-      >
+-        <span>In-depth look</span>
+-        <span>Download CV ↓</span>
++      <Reveal className="md:col-span-2">
++        <CvDownload className="hud flex items-center justify-between border border-border px-5 py-4 !text-foreground transition-colors hover:border-accent hover:!text-[hsl(var(--accent))] w-full">
++          <span>In-depth look</span>
++          <span>Download CV ↓</span>
++      
++        </CvDownload>
+       </Reveal>
+     </div>
+   );
+diff --git a/src/lib/site.js b/src/lib/site.js
+deleted file mode 100644
+index 4e2a4a8..0000000
+--- a/src/lib/site.js
++++ /dev/null
+@@ -1,2 +0,0 @@
+-// Drop your PDF at public/cv/Muhammad-Ridho-Prakoso-CV.pdf
+-export const CV_URL = "/cv/Muhammad-Ridho-Prakoso-CV.pdf";
+diff --git a/vercel.json b/vercel.json
+index 538374c..2240164 100644
+--- a/vercel.json
++++ b/vercel.json
+@@ -1,8 +1,8 @@
+ {
++  "functions": {
++    "api/request-cv.js": { "includeFiles": "private/cv.pdf" }
++  },
+   "rewrites": [
+-    {
+-      "source": "/(.*)",
+-      "destination": "/index.html"
+-    }
++    { "source": "/((?!api/).*)", "destination": "/index.html" }
+   ]
+-}
+\ No newline at end of file
++}
