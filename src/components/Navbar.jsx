@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 
 const LINKS = [
   { n: "01", label: "About", href: "#about" },
-  { n: "02", label: "Work", href: "#work" },
-  { n: "03", label: "Skills", href: "#skills" },
-  { n: "04", label: "Contact", href: "#contact" },
+  { n: "02", label: "Certifications", href: "#certifications" },
+  { n: "03", label: "Work", href: "#work" },
+  { n: "04", label: "Skills", href: "#skills" },
+  { n: "05", label: "Contact", href: "#contact" },
 ];
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -66,7 +66,7 @@ export default function Navbar() {
       {open && (
         <div className="md:hidden border-b border-border bg-background/95 backdrop-blur-xl">
           <ul className="px-5 py-4 flex flex-col">
-            {[...LINKS, { n: "05", label: "Get in touch", href: "#contact" }].map((l) => (
+            {[...LINKS, { n: "06", label: "Get in touch", href: "#contact" }].map((l) => (
               <li key={l.label} className="border-b border-border last:border-b-0">
                 <a href={l.href} onClick={() => setOpen(false)} className="flex items-baseline gap-4 py-4 font-heading font-extrabold uppercase text-2xl tracking-tight">
                   <span className="hud">{l.n}</span>

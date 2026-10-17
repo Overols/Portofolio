@@ -60,7 +60,7 @@ export default function ContactSection() {
   return (
     <section id="contact" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
       <div className="mx-auto max-w-6xl">
-        <SectionHead n="04" title="Let's Talk" />
+        <SectionHead n="05" title="Let's Talk" />
         <p className="text-muted-foreground mb-10">
           Open to full-stack and applied ML opportunities, collaborations, and research work.
         </p>

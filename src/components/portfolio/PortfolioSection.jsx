@@ -13,7 +13,7 @@ export default function PortfolioSection() {
   return (
     <section id="work" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
       <div className="mx-auto max-w-6xl">
-        <SectionHead n="02" count={`${String(PROJECTS.length).padStart(2, "0")} Projects`} title="Selected Work" />
+        <SectionHead n="03" count={`${String(PROJECTS.length).padStart(2, "0")} Projects`} title="Selected Work" />
 
         <CategoryFilter active={active} onChange={setActive} />
 

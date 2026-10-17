@@ -5,7 +5,7 @@ export default function SkillsSection() {
   return (
     <section id="skills" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
       <div className="mx-auto max-w-6xl">
-        <SectionHead n="03" count={`${SKILL_GROUPS.length} Categories`} title="Skills" />
+        <SectionHead n="04" count={`${SKILL_GROUPS.length} Categories`} title="Skills" />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           {SKILL_GROUPS.map((group) => (

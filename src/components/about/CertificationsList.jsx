@@ -36,7 +36,7 @@ export default function CertificationsList() {
   }, [lightbox]);
 
   return (
-    <div className="mt-16 border-t border-border pt-10">
+      <div id="certifications" className="mt-16 border-t border-border pt-10 scroll-mt-24">
       <div className="flex items-center gap-3 mb-8">
         <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent-2))]" />
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
