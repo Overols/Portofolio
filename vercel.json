@@ -1,8 +1,8 @@
 {
+  "functions": {
+    "api/request-cv.js": { "includeFiles": "private/cv.pdf" }
+  },
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }

@@ -1,6 +1,6 @@
 import { ArrowUpRight, Download } from "lucide-react";
 import { SKILL_GROUPS } from "@/lib/skills";
-import { CV_URL } from "@/lib/site";
+import CvDownload from "@/components/CvDownload";
 
 const TECH = SKILL_GROUPS.flatMap((g) => g.skills.map((s) => s.name));
 const FACTS = ["Based in Jakarta, Indonesia", "Bina Nusantara University", "Open to new opportunities"];
@@ -42,9 +42,7 @@ export default function Hero() {
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
 
-            <a
-              href={CV_URL}
-              download="Muhammad-Ridho-Prakoso-CV.pdf"
+            <CvDownload
               style={{ animationDelay: "0.77s" }}
               className="pop-in group relative inline-flex items-center justify-center overflow-hidden border border-accent/60 hover:border-accent text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 transition-colors"
             >
@@ -54,7 +52,7 @@ export default function Hero() {
                 Download CV
                 <span className="text-[10px] opacity-60">PDF</span>
               </span>
-            </a>
+            </CvDownload>
 
             <a href="#work" style={{ animationDelay: "0.89s" }} className="pop-in group inline-flex items-center justify-center gap-2 border border-border text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 hover:border-foreground/50 transition-colors">
               View portfolio

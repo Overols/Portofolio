@@ -1,6 +1,7 @@
 #env
 .env
 .env.*
+!.env.example
 
 # Logs
 /logs
@@ -35,3 +36,6 @@ dist-ssr
 .env
 .vite
 base44/.app.jsonc
+
+# Vercel CLI local link (created by `vercel dev`)
+.vercel

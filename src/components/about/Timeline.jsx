@@ -1,4 +1,4 @@
-import { CV_URL } from "@/lib/site";
+import CvDownload from "@/components/CvDownload";
 import Reveal from "@/components/Reveal";
 
 const EXPERIENCE = [
@@ -36,14 +36,12 @@ export default function Timeline() {
     <div className="mt-20 grid gap-12 md:grid-cols-2">
       <Rows title="Work experience" rows={EXPERIENCE} />
       <Rows title="Study" rows={STUDY} delay={0.12} />
-      <Reveal
-        as="a"
-        href={CV_URL}
-        download="Muhammad-Ridho-Prakoso-CV.pdf"
-        className="hud md:col-span-2 flex items-center justify-between border border-border px-5 py-4 !text-foreground transition-colors hover:border-accent hover:!text-[hsl(var(--accent))]"
-      >
-        <span>In-depth look</span>
-        <span>Download CV ↓</span>
+      <Reveal className="md:col-span-2">
+        <CvDownload className="hud flex items-center justify-between border border-border px-5 py-4 !text-foreground transition-colors hover:border-accent hover:!text-[hsl(var(--accent))] w-full">
+          <span>In-depth look</span>
+          <span>Download CV ↓</span>
+      
+        </CvDownload>
       </Reveal>
     </div>
   );
