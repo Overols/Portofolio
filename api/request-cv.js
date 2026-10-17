@@ -92,13 +92,16 @@ export default async function handler(req, res) {
   const failOpen = process.env.QEV_FAIL_OPEN === "true";
   const check = await checkMailbox(e);
 
-  if (check.status !== "ok") {
+  if (check.status === "unconfigured") {
+    // No QEV_API_KEY set: don't lock everyone out. The format, disposable-domain, typo and MX
+    // checks above already passed, so continue in "local checks only" mode.
+    // Set QEV_API_KEY in Vercel to also verify that the mailbox itself exists.
+    console.warn("[cv] QEV_API_KEY is not set: mailbox-level check skipped (format/MX checks only).");
+  } else if (check.status !== "ok") {
     console.warn("[cv] mailbox check unavailable:", check.status, check.http ?? "");
     if (!failOpen) {
       return res.status(503).json({
-        error: check.status === "unconfigured"
-          ? "Email verification isn't set up yet. Please contact me by email instead."
-          : "Couldn't verify your email right now. Please try again in a moment.",
+        error: "Couldn't verify your email right now. Please try again in a moment.",
       });
     }
   } else {
