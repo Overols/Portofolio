@@ -23,11 +23,11 @@ export default function Hero() {
             Full-stack systems · Applied ML · Computer vision
           </p>
 
-          <h1 className="mt-8 font-heading font-extrabold uppercase tracking-[-0.045em] leading-[0.88] text-[clamp(2.5rem,9.5vw,7.5rem)]">
-            {["Muhammad Ridho", "Prakoso"].map((line, i, arr) => (
-              <span key={line} className="block">
-                <span className="word-in" style={{ animationDelay: `${0.2 + i * 0.12}s` }}>{line}</span>
-                {i === arr.length - 1 && <span className="text-[hsl(var(--accent))]">.</span>}
+          <h1 className="mt-8 whitespace-nowrap font-heading font-extrabold uppercase tracking-[-0.045em] leading-[0.88] text-[clamp(1.5rem,6.6vw,5.5rem)]">
+            {["Muhammad", "Ridho", "Prakoso"].map((word, i, arr) => (
+              <span key={word}>
+                <span className="word-in" style={{ animationDelay: `${0.2 + i * 0.12}s` }}>{word}</span>
+                {i < arr.length - 1 && " "}
               </span>
             ))}
           </h1>
