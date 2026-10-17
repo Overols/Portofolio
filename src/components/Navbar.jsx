@@ -7,6 +7,7 @@ const LINKS = [
   { n: "04", label: "Skills", href: "#skills" },
   { n: "05", label: "Contact", href: "#contact" },
 ];
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -24,7 +25,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50">
+    <header className="nav-drop fixed top-0 inset-x-0 z-50">
       <div className={`transition-colors duration-300 ${scrolled || open ? "bg-background/85 backdrop-blur-xl border-b border-border" : "bg-transparent"}`}>
         <nav className="mx-auto max-w-6xl px-5 sm:px-8 h-16 flex items-center justify-between">
           <a href="#top" className="flex items-baseline gap-3">

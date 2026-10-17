@@ -45,7 +45,7 @@ export default function HudBar() {
   };
 
   return (
-    <div className="hud pointer-events-none fixed bottom-4 left-8 z-40 hidden lg:flex items-center gap-5 border border-border bg-background/70 px-3 py-1.5 backdrop-blur">
+    <div style={{ animationDelay: "1.1s" }} className="pop-in hud pointer-events-none fixed bottom-4 left-8 z-40 hidden lg:flex items-center gap-5 border border-border bg-background/70 px-3 py-1.5 backdrop-blur">
       <span>SCRL {scroll.toFixed(2)}</span>
       <span>CRSR {cur[0].toFixed(3)} {cur[1].toFixed(3)}</span>
       <span>0{sec} — {SECTIONS[sec][1]}</span>

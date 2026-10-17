@@ -73,6 +73,30 @@
     color: transparent;
   }
 
+  /* Page-load pop-up (hero, HUD bar) */
+  @keyframes pop-in {
+    0%   { opacity: 0; transform: translate3d(0, 1.5rem, 0) scale(0.9); }
+    60%  { opacity: 1; transform: translate3d(0, -0.2rem, 0) scale(1.02); }
+    100% { opacity: 1; transform: none; }
+  }
+  .pop-in {
+    opacity: 0;
+    animation: pop-in 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Navbar drops in from the top on load */
+  @keyframes nav-drop {
+    from { opacity: 0; transform: translate3d(0, -100%, 0); }
+  }
+  .nav-drop {
+    animation: nav-drop 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /* Hero planet fades and grows in */
+  @keyframes art-in {
+    from { opacity: 0; scale: 0.88; }
+  }
+
   /* Soft, slow-drifting gradient orbs for hero/section backgrounds */
   @keyframes drift {
     0%, 100% { transform: translate(0, 0) scale(1); }
@@ -148,6 +172,7 @@
     height: 100%;
     object-fit: cover;
     image-rendering: pixelated;
+    animation: art-in 1.6s ease 0.3s both;
     filter: grayscale(0.6) contrast(1.1) brightness(0.9);
   }
   .hero-bg-art::after {
@@ -163,6 +188,8 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .hero-bg-art video { display: none; }
+    .pop-in { opacity: 1; animation: none; }
+    .nav-drop, .hero-bg-art { animation: none; }
   }
 
   .outline-text {
@@ -179,5 +206,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .marquee, .orb-drift, .orb-drift-slow { animation: none; }
+    .pop-in { opacity: 1; animation: none; }
+    .nav-drop, .hero-bg-art { animation: none; }
   }
 }

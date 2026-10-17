@@ -1,4 +1,5 @@
 import { Linkedin, Github, Instagram, ArrowUp } from "lucide-react";
+import Reveal from "@/components/Reveal";
 
 const SOCIALS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/muhammadridhoprakoso/", Icon: Linkedin },
@@ -18,7 +19,7 @@ export default function Footer() {
     <footer className="relative w-full border-t border-border bg-background">
       <div className="mx-auto max-w-6xl px-5 sm:px-8 py-14 sm:py-16">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-10">
-          <div className="max-w-sm">
+          <Reveal className="max-w-sm">
             <a href="#top" className="flex items-center gap-2.5 mb-4">
               <span className="flex h-8 w-8 items-center justify-center rounded-md bg-accent font-mono-tech font-bold text-sm text-accent-foreground">
                 MR
@@ -28,12 +29,11 @@ export default function Footer() {
               </span>
             </a>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Full-Stack Software Developer & AI Analyst, building applied ML and web systems
-              from Jakarta, Indonesia.
+              AI Engineer, building applied ML and web systems from Jakarta, Indonesia.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="flex gap-14">
+          <Reveal delay={0.12} className="flex gap-14">
             <div>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
                 Navigate
@@ -68,12 +68,12 @@ export default function Footer() {
                 ))}
               </ul>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
 
       <div className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-5 sm:px-8 py-5 flex items-center justify-between text-xs text-muted-foreground">
+        <Reveal className="mx-auto max-w-6xl px-5 sm:px-8 py-5 flex items-center justify-between text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} Muhammad Ridho Prakoso</span>
           <a
             href="#top"
@@ -82,7 +82,7 @@ export default function Footer() {
           >
             <ArrowUp className="h-3.5 w-3.5" />
           </a>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );

@@ -16,10 +16,10 @@ export default function Hero() {
       </div>
       <div className="relative z-10 flex flex-1 items-center px-5 sm:px-8 pt-28 pb-12">
         <div className="mx-auto max-w-6xl w-full">
-          <p className="fade-up font-mono-tech text-xs sm:text-sm uppercase tracking-[0.14em] text-foreground" style={{ animationDelay: "0.05s" }}>
-            Full-Stack Software Developer &amp; AI Analyst
+          <p className="pop-in font-mono-tech text-xs sm:text-sm uppercase tracking-[0.14em] text-foreground" style={{ animationDelay: "0.05s" }}>
+            AI Engineer
           </p>
-          <p className="fade-up hud mt-2" style={{ animationDelay: "0.12s" }}>
+          <p className="pop-in hud mt-2" style={{ animationDelay: "0.12s" }}>
             Full-stack systems · Applied ML · Computer vision
           </p>
 
@@ -32,12 +32,12 @@ export default function Hero() {
             ))}
           </h1>
 
-          <p className="fade-up mt-8 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed" style={{ animationDelay: "0.55s" }}>
+          <p className="pop-in mt-8 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed" style={{ animationDelay: "0.55s" }}>
             I build full-stack systems and applied ML models — from real-time computer vision to production-ready platforms.
           </p>
 
-          <div className="fade-up mt-10 flex flex-col sm:flex-row gap-3" style={{ animationDelay: "0.65s" }}>
-            <a href="#contact" className="group inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 hover:brightness-110 transition">
+          <div className="mt-10 flex flex-col sm:flex-row gap-3">
+            <a href="#contact" style={{ animationDelay: "0.65s" }} className="pop-in group inline-flex items-center justify-center gap-2 bg-accent text-accent-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 hover:brightness-110 transition">
               Contact about work
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
@@ -45,7 +45,8 @@ export default function Hero() {
             <a
               href={CV_URL}
               download="Muhammad-Ridho-Prakoso-CV.pdf"
-              className="group relative inline-flex items-center justify-center overflow-hidden border border-accent/60 hover:border-accent text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 transition-colors"
+              style={{ animationDelay: "0.77s" }}
+              className="pop-in group relative inline-flex items-center justify-center overflow-hidden border border-accent/60 hover:border-accent text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 transition-colors"
             >
               <span aria-hidden className="absolute inset-0 translate-y-full bg-accent transition-transform duration-300 ease-out group-hover:translate-y-0" />
               <span className="relative flex items-center gap-3 transition-colors duration-300 group-hover:text-accent-foreground">
@@ -55,13 +56,13 @@ export default function Hero() {
               </span>
             </a>
 
-            <a href="#work" className="group inline-flex items-center justify-center gap-2 border border-border text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 hover:border-foreground/50 transition-colors">
+            <a href="#work" style={{ animationDelay: "0.89s" }} className="pop-in group inline-flex items-center justify-center gap-2 border border-border text-foreground font-mono-tech text-xs font-semibold uppercase tracking-[0.12em] px-6 py-4 hover:border-foreground/50 transition-colors">
               View portfolio
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </a>
           </div>
 
-          <div className="fade-up hud mt-12 flex flex-col sm:flex-row gap-2 sm:gap-10" style={{ animationDelay: "0.8s" }}>
+          <div className="pop-in hud mt-12 flex flex-col sm:flex-row gap-2 sm:gap-10" style={{ animationDelay: "0.8s" }}>
             {FACTS.map((f) => <span key={f}>{f}</span>)}
           </div>
         </div>
