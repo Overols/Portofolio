@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X, FileImage } from "lucide-react";
 import { CERTIFICATION_GROUPS } from "@/lib/certifications";
 import Reveal from "@/components/Reveal";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 // Auto-loads every image dropped into src/assets/certifications/ — no manual
 // imports needed. Name each file after its certificate, e.g. "ai-fundamentals.jpg"
@@ -45,48 +46,63 @@ export default function CertificationsList() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-10">
-        {CERTIFICATION_GROUPS.map((group) => (
-          <Reveal key={group.category}>
-            <h3 className="flex items-center gap-2 font-heading font-semibold text-sm text-foreground mb-4">
-              {group.category}
-              <span className="text-xs font-normal text-muted-foreground">
-                ({group.items.length})
-              </span>
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {group.items.map((item) => {
-                const src = IMAGE_BY_SLUG[slugify(item)];
-                return (
-                  <button
-                    key={item}
-                    type="button"
-                    disabled={!src}
-                    onClick={() => src && setLightbox({ src, name: item })}
-                    className="group text-left rounded-none border border-border bg-card overflow-hidden hover:border-[hsl(var(--accent))]/50 transition-colors disabled:cursor-default"
-                  >
-                    <div className="aspect-[4/3] bg-secondary/50 flex items-center justify-center overflow-hidden">
-                      {src ? (
-                        <img
-                          src={src}
-                          alt={item}
-                          loading="lazy"
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      ) : (
-                        <FileImage className="h-5 w-5 text-muted-foreground/40" />
-                      )}
-                    </div>
-                    <p className="px-3 py-2.5 text-xs text-foreground/80 leading-snug line-clamp-2">
-                      {item}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-          </Reveal>
-        ))}
-      </div>
+      <Reveal>
+        {/* type="multiple": several groups can be open at once. The first one starts open. */}
+        <Accordion
+          type="multiple"
+          defaultValue={[CERTIFICATION_GROUPS[0]?.category]}
+          className="flex flex-col gap-3"
+        >
+          {CERTIFICATION_GROUPS.map((group) => (
+            <AccordionItem
+              key={group.category}
+              value={group.category}
+              className="border border-border bg-card/40 data-[state=open]:border-[hsl(var(--accent))]/40 transition-colors"
+            >
+              <AccordionTrigger className="px-4 py-4 hover:no-underline hover:text-[hsl(var(--accent))] transition-colors">
+                <span className="flex flex-wrap items-center gap-x-3 gap-y-1 pr-4">
+                  <span className="font-heading font-semibold text-sm text-foreground">{group.category}</span>
+                  <span className="font-mono-tech text-[0.7rem] tracking-wider text-muted-foreground">
+                    {group.items.length} {group.items.length === 1 ? "certificate" : "certificates"}
+                  </span>
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="px-4 pb-4 pt-1">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                  {group.items.map((item) => {
+                    const src = IMAGE_BY_SLUG[slugify(item)];
+                    return (
+                      <button
+                        key={item}
+                        type="button"
+                        disabled={!src}
+                        onClick={() => src && setLightbox({ src, name: item })}
+                        className="group text-left rounded-none border border-border bg-card overflow-hidden hover:border-[hsl(var(--accent))]/50 transition-colors disabled:cursor-default"
+                      >
+                        <div className="aspect-[4/3] bg-secondary/50 flex items-center justify-center overflow-hidden">
+                          {src ? (
+                            <img
+                              src={src}
+                              alt={item}
+                              loading="lazy"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          ) : (
+                            <FileImage className="h-5 w-5 text-muted-foreground/40" />
+                          )}
+                        </div>
+                        <p className="px-3 py-2.5 text-xs text-foreground/80 leading-snug line-clamp-2">
+                          {item}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </Reveal>
 
       {lightbox && (
         <div
