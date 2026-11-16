@@ -4,7 +4,7 @@ import { SKILL_GROUPS } from "@/lib/skills";
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
+    <section id="skills" className="relative w-full bg-background/75 py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
       <div className="mx-auto max-w-6xl">
         <SectionHead n="04" count={`${SKILL_GROUPS.length} Categories`} title="Skills" />
 

@@ -11,7 +11,7 @@ export default function PortfolioSection() {
     active === "All" ? PROJECTS : PROJECTS.filter((p) => p.category === active);
 
   return (
-    <section id="work" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
+    <section id="work" className="relative w-full bg-background/75 py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
       <div className="mx-auto max-w-6xl">
         <SectionHead n="03" count={`${String(PROJECTS.length).padStart(2, "0")} Projects`} title="Selected Work" />
 

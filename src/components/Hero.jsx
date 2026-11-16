@@ -7,13 +7,7 @@ const FACTS = ["Based in Jakarta, Indonesia", "Bina Nusantara University", "Open
 
 export default function Hero() {
   return (
-    <section id="top" className="relative min-h-[100svh] w-full overflow-hidden bg-background flex flex-col">
-      <div aria-hidden className="hero-bg-art">
-        <video autoPlay loop muted playsInline preload="metadata" poster="/hero/hero-bg-poster.jpg">
-          <source src="/hero/hero-bg.webm" type="video/webm" />
-          <source src="/hero/hero-bg.mp4" type="video/mp4" />
-        </video>
-      </div>
+    <section id="top" className="relative min-h-[100svh] w-full overflow-hidden flex flex-col">
       <div className="relative z-10 flex flex-1 items-center px-5 sm:px-8 pt-28 pb-12">
         <div className="mx-auto max-w-6xl w-full">
           <p className="pop-in hud mt-2" style={{ animationDelay: "0.12s" }}>

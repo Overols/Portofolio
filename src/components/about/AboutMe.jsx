@@ -10,7 +10,7 @@ const BIO =
 
 export default function AboutMe() {
   return (
-    <section id="about" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8">
+    <section id="about" className="relative w-full bg-background/75 py-20 sm:py-28 px-5 sm:px-8">
       <div className="mx-auto max-w-6xl">
         <SectionHead n="01" title="About Me" />
 

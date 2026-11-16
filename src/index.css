@@ -66,7 +66,6 @@
     font-family: var(--font-mono);
   }
 
-  /* Gradient text used sparingly — one accent, not a rainbow */
   .text-gradient {
     background-image: linear-gradient(90deg, hsl(var(--accent)), hsl(var(--accent-2)));
     -webkit-background-clip: text;
@@ -74,7 +73,6 @@
     color: transparent;
   }
 
-  /* Page-load pop-up (hero, HUD bar) */
   @keyframes pop-in {
     0%   { opacity: 0; transform: translate3d(0, 1.5rem, 0) scale(0.9); }
     60%  { opacity: 1; transform: translate3d(0, -0.2rem, 0) scale(1.02); }
@@ -123,7 +121,6 @@
     .reveal, .title-word { opacity: 1; transform: none; transition: none; }
   }
 
-  /* Navbar drops in from the top on load */
   @keyframes nav-drop {
     from { opacity: 0; transform: translate3d(0, -100%, 0); }
   }
@@ -131,12 +128,6 @@
     animation: nav-drop 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
-  /* Hero planet fades and grows in */
-  @keyframes art-in {
-    from { opacity: 0; scale: 0.88; }
-  }
-
-  /* Soft, slow-drifting gradient orbs for hero/section backgrounds */
   @keyframes drift {
     0%, 100% { transform: translate(0, 0) scale(1); }
     50% { transform: translate(3%, -4%) scale(1.08); }
@@ -182,7 +173,6 @@
 }
 
 @layer utilities {
-  /* HUD micro-label: mono, tiny, tracked-out caps */
   .hud {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
@@ -191,42 +181,8 @@
     color: hsl(var(--muted-foreground));
   }
 
-  /* Hero background art — pixel planet, tinted to the accent */
-  .hero-bg-art {
-    position: absolute;
-    right: -6%;
-    top: 50%;
-    width: min(78vh, 62vw);
-    aspect-ratio: 1;
-    transform: translateY(-50%);
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.7;
-    background: url("/hero/hero-bg-poster.jpg") center / cover;
-    -webkit-mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
-    mask-image: radial-gradient(closest-side, #000 45%, transparent 100%);
-  }
-  .hero-bg-art video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    image-rendering: pixelated;
-    animation: art-in 1.6s ease 0.3s both;
-    filter: grayscale(0.6) contrast(1.1) brightness(0.9);
-  }
-  .hero-bg-art::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: hsl(var(--accent));
-    mix-blend-mode: color;
-    opacity: 0.35;
-  }
-  @media (max-width: 640px) {
-    .hero-bg-art { width: 120vw; right: -35%; opacity: 0.45; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .hero-bg-art video { display: none; }
     .pop-in { opacity: 1; animation: none; }
     .nav-drop, .hero-bg-art { animation: none; }
   }
@@ -246,6 +202,6 @@
   @media (prefers-reduced-motion: reduce) {
     .marquee, .orb-drift, .orb-drift-slow { animation: none; }
     .pop-in { opacity: 1; animation: none; }
-    .nav-drop, .hero-bg-art { animation: none; }
+    .nav-drop { animation: none; }
   }
 }

@@ -3,8 +3,6 @@ import Reveal from "@/components/Reveal";
 import { useState } from "react";
 import { Linkedin, Github, Instagram, Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
-// Get a free access key at https://web3forms.com (enter your email, no signup) —
-// paste it below. Submissions land straight in your inbox, no backend needed.
 const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_KEY;
 
 const SOCIALS = [
@@ -59,7 +57,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="relative w-full bg-background py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
+    <section id="contact" className="relative w-full bg-background/75 py-20 sm:py-28 px-5 sm:px-8 border-t border-border">
       <div className="mx-auto max-w-6xl">
         <SectionHead n="05" title="Let's Talk" />
         <Reveal as="p" className="text-muted-foreground mb-10">
