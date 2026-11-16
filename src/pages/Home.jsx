@@ -11,6 +11,7 @@ import PlanetCanvas from "@/components/PlanetCanvas";
 export default function Home() {
   return (
     <div className="relative min-h-[100svh] text-foreground">
+      <PlanetCanvas />
       <Navbar />
 
       <main>
