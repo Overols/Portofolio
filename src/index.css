@@ -181,7 +181,6 @@
     color: hsl(var(--muted-foreground));
   }
 
-  }
   @media (prefers-reduced-motion: reduce) {
     .pop-in { opacity: 1; animation: none; }
     .nav-drop, .hero-bg-art { animation: none; }
