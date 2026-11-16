@@ -16,9 +16,6 @@ export default function Hero() {
       </div>
       <div className="relative z-10 flex flex-1 items-center px-5 sm:px-8 pt-28 pb-12">
         <div className="mx-auto max-w-6xl w-full">
-          <p className="pop-in font-mono-tech text-xs sm:text-sm uppercase tracking-[0.14em] text-foreground" style={{ animationDelay: "0.05s" }}>
-            AI Engineer
-          </p>
           <p className="pop-in hud mt-2" style={{ animationDelay: "0.12s" }}>
             Full-stack systems · Applied ML · Computer vision
           </p>
