@@ -1,0 +1,8 @@
+{
+  "name": "planet-canvas-earth-texture",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Natural Earth land polygons used to create an accurate Earth surface mask for the portfolio planet canvas.",
+  "license": "Public domain",
+  "source": "https://www.naturalearthdata.com/downloads/110m-physical-vectors/110m-land/"
+}

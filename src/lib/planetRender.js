@@ -85,12 +85,13 @@ export function renderPlanet(buf, cols, rows, p, opt) {
   const tf = Math.tan(o.fov * 0.5) * Math.max(1, 1 / aspect);
   const d = 1 + (o.d0 - 1) * Math.pow((o.d1 - 1) / (o.d0 - 1), p);
   const ox = aspect * o.offsetX * (1 - smooth(0, 0.55, p));
-  const rot = o.rot0 + (o.rotationAngle ?? (o.rotationProgress ?? p) * o.rotSpan);
+  const rot = o.rotation ?? (o.rot0 + (o.rotationAngle ?? (o.rotationProgress ?? p) * o.rotSpan));
   const cr = Math.cos(rot), sr = Math.sin(rot), ct = Math.cos(o.tilt), st = Math.sin(o.tilt);
   const cloudFade = smooth(1.04, 1.5, d);
   const starScale = 1 + 3 * p;
   const pxFp = (2 * tf) / rows;
   const LV = o.levels;
+  const landMask = o.landMask;
 
   for (let y = 0; y < rows; y++) {
     const sy = 1 - (2 * (y + 0.5)) / rows;
@@ -131,6 +132,24 @@ export function renderPlanet(buf, cols, rows, p, opt) {
         } else if (h < 0.55) c = ROCK;
         else c = SNOW;
  
+        if (landMask) {
+          const longitude = Math.atan2(px, pz);
+          const latitude = Math.asin(clamp(py, -1, 1));
+          const u = ((longitude / (Math.PI * 2) + 0.5) * landMask.width) % landMask.width;
+          const v = clamp((0.5 - latitude / Math.PI) * landMask.height, 0, landMask.height - 1);
+          const mapX = (Math.floor(u) + landMask.width) % landMask.width;
+          const mapY = Math.floor(v);
+          const isLand = landMask.data[(mapY * landMask.width + mapX) * 4] > 127;
+          if (isLand) {
+            const latitudeFactor = Math.abs(py);
+            if (latitudeFactor > 0.78) c = SNOW;
+            else if (latitudeFactor > 0.58) c = ROCK;
+            else if (latitudeFactor > 0.35) c = FOREST;
+            else c = GRASS;
+          } else {
+            c = Math.abs(py) > 0.84 ? [112, 171, 206] : OCEAN;
+          }
+        }
         let r = c[0], g = c[1], bl = c[2];
         if (h >= o.sea) {
           const k = 1 + (((Math.floor(h * 12) % 3) + 3) % 3 - 1) * 0.08;
