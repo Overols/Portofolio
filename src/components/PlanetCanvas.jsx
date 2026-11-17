@@ -14,6 +14,7 @@ export default function PlanetCanvas() {
     const ctx = canvas.getContext("2d");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let cur = 0, target = 0, raf = 0, img, buf;
+    const orbitDuration = 28000;
 
     const size = () => {
       const px = Math.max(5, Math.ceil(window.innerWidth / 200));
@@ -26,14 +27,23 @@ export default function PlanetCanvas() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       return max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
     };
-    const draw = () => {
+    const draw = (timestamp = performance.now()) => {
       raf = 0;
       cur += (target - cur) * 0.12;
       if (Math.abs(target - cur) < 0.0004) cur = target;
-      renderPlanet(buf, canvas.width, canvas.height, cur);
+
+      // Spin the planet continuously while the page is at its home/hero position.
+      // renderPlanet expects scroll progress, so map one full rotation to its rotation span.
+      if (!reduce && cur < 0.015) {
+        const orbitProgress = (timestamp % orbitDuration) / orbitDuration;
+        const rotationProgress = ((orbitProgress * (Math.PI * 2)) / 1.1) % 1;
+        renderPlanet(buf, canvas.width, canvas.height, rotationProgress);
+      } else {
+        renderPlanet(buf, canvas.width, canvas.height, cur);
+      }
       ctx.putImageData(img, 0, 0);
       canvas.style.opacity = String(0.85 - 0.55 * ease(0.08, 0.6, cur));
-      if (cur !== target) raf = requestAnimationFrame(draw);
+      if (cur !== target || (!reduce && cur < 0.015)) raf = requestAnimationFrame(draw);
     };
     const kick = () => { if (!raf) raf = requestAnimationFrame(draw); };
     const onScroll = () => { target = progress(); kick(); };
