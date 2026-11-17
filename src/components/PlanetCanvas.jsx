@@ -8,11 +8,17 @@ const ease = (a, b, v) => {
   return t * t * (3 - 2 * t);
 };
 
-// Central Kalimantan is land and provides a better visual anchor for the Indonesian archipelago.
-const INDONESIA_CENTER_LAT = -1.5 * Math.PI / 180;
+const INDONESIA_CENTER_LAT = 0.5 * Math.PI / 180;
 const INDONESIA_CENTER_LON = 114 * Math.PI / 180;
-const TARGET_TILT = INDONESIA_CENTER_LAT;
-const TARGET_ROTATION = -INDONESIA_CENTER_LON;
+// Invert the renderer's Y rotation followed by X tilt so the land point is centered.
+const TARGET_ROTATION = Math.atan2(
+  Math.cos(INDONESIA_CENTER_LAT) * Math.sin(INDONESIA_CENTER_LON),
+  -Math.sqrt(1 - Math.cos(INDONESIA_CENTER_LAT) ** 2 * Math.sin(INDONESIA_CENTER_LON) ** 2),
+);
+const TARGET_TILT = Math.atan2(
+  -Math.sin(INDONESIA_CENTER_LAT) / Math.cos(TARGET_ROTATION),
+  Math.cos(INDONESIA_CENTER_LAT) * Math.cos(INDONESIA_CENTER_LON) / Math.cos(TARGET_ROTATION),
+);
 const mixAngle = (from, to, t) => {
   const delta = Math.atan2(Math.sin(to - from), Math.cos(to - from));
   return from + delta * t;
