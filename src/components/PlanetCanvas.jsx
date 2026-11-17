@@ -8,9 +8,9 @@ const ease = (a, b, v) => {
   return t * t * (3 - 2 * t);
 };
 
-const INDONESIA_CENTER_LAT = -2 * Math.PI / 180;
-const INDONESIA_CENTER_LON = 118 * Math.PI / 180;
-// Center the broad Indonesian archipelago, rather than zooming to one city.
+// Central Kalimantan is land and provides a better visual anchor for the Indonesian archipelago.
+const INDONESIA_CENTER_LAT = -1.5 * Math.PI / 180;
+const INDONESIA_CENTER_LON = 114 * Math.PI / 180;
 const TARGET_TILT = INDONESIA_CENTER_LAT;
 const TARGET_ROTATION = -INDONESIA_CENTER_LON;
 const mixAngle = (from, to, t) => {
