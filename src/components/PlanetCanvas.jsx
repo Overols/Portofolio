@@ -37,7 +37,7 @@ export default function PlanetCanvas() {
       if (!reduce && cur < 0.015) {
         const orbitProgress = (timestamp % orbitDuration) / orbitDuration;
         const rotationProgress = ((orbitProgress * (Math.PI * 2)) / 1.1) % 1;
-        renderPlanet(buf, canvas.width, canvas.height, rotationProgress);
+        renderPlanet(buf, canvas.width, canvas.height, cur, { rotationProgress });
       } else {
         renderPlanet(buf, canvas.width, canvas.height, cur);
       }
