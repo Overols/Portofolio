@@ -8,12 +8,15 @@ const ease = (a, b, v) => {
   return t * t * (3 - 2 * t);
 };
 
-const mix = (a, b, t) => a + (b - a) * t;
-const JAKARTA = { lat: -6.2088 * Math.PI / 180, lon: 106.8456 * Math.PI / 180 };
-const TARGET_ROTATION = Math.atan2(
-  Math.sin(JAKARTA.lon),
-  Math.sin(JAKARTA.lat) * Math.sin(0.35) + Math.cos(JAKARTA.lat) * Math.cos(0.35),
-);
+const INDONESIA_CENTER_LAT = -2 * Math.PI / 180;
+const INDONESIA_CENTER_LON = 118 * Math.PI / 180;
+// Center the broad Indonesian archipelago, rather than zooming to one city.
+const TARGET_TILT = INDONESIA_CENTER_LAT;
+const TARGET_ROTATION = -INDONESIA_CENTER_LON;
+const mixAngle = (from, to, t) => {
+  const delta = Math.atan2(Math.sin(to - from), Math.cos(to - from));
+  return from + delta * t;
+};
 
 export default function PlanetCanvas() {
   const ref = useRef(null);
@@ -80,10 +83,11 @@ export default function PlanetCanvas() {
       if (Math.abs(target - cur) < 0.0004) cur = target;
 
       const phase = reduce ? 0 : ((((timestamp - orbitStart) % orbitDuration) + orbitDuration) % orbitDuration) / orbitDuration * (Math.PI * 2);
-      // Ease the globe toward a centered Jakarta view while scrolling; d/zoom remains scroll-driven.
-      const scrollBlend = ease(0, 0.28, cur);
-      const rotation = mix(3.0 + phase, TARGET_ROTATION, scrollBlend);
-      renderPlanet(buf, canvas.width, canvas.height, cur, { rotation, landMask });
+      // Ease toward the center of the Indonesian archipelago; zoom remains scroll-driven.
+      const scrollBlend = ease(0.04, 0.42, cur);
+      const rotation = mixAngle(3.0 + phase, TARGET_ROTATION, scrollBlend);
+      const tilt = -0.35 + (TARGET_TILT + 0.35) * scrollBlend;
+      renderPlanet(buf, canvas.width, canvas.height, cur, { rotation, tilt, landMask });
       ctx.putImageData(img, 0, 0);
       canvas.style.opacity = String(0.85 - 0.55 * ease(0.08, 0.6, cur));
       if (cur !== target || (!reduce && cur < 0.015)) raf = requestAnimationFrame(draw);
