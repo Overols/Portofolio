@@ -85,7 +85,7 @@ export function renderPlanet(buf, cols, rows, p, opt) {
   const tf = Math.tan(o.fov * 0.5) * Math.max(1, 1 / aspect);
   const d = 1 + (o.d0 - 1) * Math.pow((o.d1 - 1) / (o.d0 - 1), p);
   const ox = aspect * o.offsetX * (1 - smooth(0, 0.55, p));
-  const rot = o.rot0 + (o.rotationProgress ?? p) * o.rotSpan;
+  const rot = o.rot0 + (o.rotationAngle ?? (o.rotationProgress ?? p) * o.rotSpan);
   const cr = Math.cos(rot), sr = Math.sin(rot), ct = Math.cos(o.tilt), st = Math.sin(o.tilt);
   const cloudFade = smooth(1.04, 1.5, d);
   const starScale = 1 + 3 * p;

@@ -14,10 +14,12 @@ export default function PlanetCanvas() {
     const ctx = canvas.getContext("2d");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let cur = 0, target = 0, raf = 0, img, buf;
-    const orbitDuration = 28000;
+    const orbitDuration = 36000;
+    const orbitStart = performance.now();
 
     const size = () => {
-      const px = Math.max(5, Math.ceil(window.innerWidth / 200));
+      // Render at a denser internal resolution to reduce visible stepping during rotation.
+      const px = Math.max(2, Math.ceil(window.innerWidth / 320));
       canvas.width = Math.ceil(window.innerWidth / px);
       canvas.height = Math.ceil(window.innerHeight / px);
       img = ctx.createImageData(canvas.width, canvas.height);
@@ -32,12 +34,10 @@ export default function PlanetCanvas() {
       cur += (target - cur) * 0.12;
       if (Math.abs(target - cur) < 0.0004) cur = target;
 
-      // Spin the planet continuously while the page is at its home/hero position.
-      // renderPlanet expects scroll progress, so map one full rotation to its rotation span.
+      // Rotation uses a full 2π phase; the last and first orbit frames are identical.
       if (!reduce && cur < 0.015) {
-        const orbitProgress = (timestamp % orbitDuration) / orbitDuration;
-        const rotationProgress = ((orbitProgress * (Math.PI * 2)) / 1.1) % 1;
-        renderPlanet(buf, canvas.width, canvas.height, cur, { rotationProgress });
+        const phase = ((((timestamp - orbitStart) % orbitDuration) + orbitDuration) % orbitDuration) / orbitDuration * (Math.PI * 2);
+        renderPlanet(buf, canvas.width, canvas.height, cur, { rotationAngle: phase });
       } else {
         renderPlanet(buf, canvas.width, canvas.height, cur);
       }
@@ -64,7 +64,7 @@ export default function PlanetCanvas() {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-      <canvas ref={ref} className="h-full w-full" style={{ imageRendering: "pixelated" }} />
+      <canvas ref={ref} className="h-full w-full" style={{ imageRendering: "auto" }} />
     </div>
   );
 }
